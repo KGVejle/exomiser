@@ -88,6 +88,9 @@ process exo13 {
 
     shell:
     '''
+    user="$USER"
+    tmpDIR="/data/TMP/TMP.${user}"
+    export TMPDIR="$tmpDIR"
     index=`tail -n 1 !{ped}|awk '{print $2}'`
     father=`tail -n 1 !{ped}|awk '{print $3}'`
     mother=`tail -n 1 !{ped}|awk '{print $4}'`
@@ -120,6 +123,10 @@ process exo13_1 {
     path("*.{html,tsv,vcf}")
     shell:
     '''
+
+    user="$USER"
+    tmpDIR="/data/TMP/TMP.${user}"
+    export TMPDIR="$tmpDIR"
     index=`tail -n 1 !{ped}|awk '{print $2}'`
     father=`tail -n 1 !{ped}|awk '{print $3}'`
     mother=`tail -n 1 !{ped}|awk '{print $4}'`
