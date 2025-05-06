@@ -104,7 +104,7 @@ process exo13 {
      s/OUTPUT_PH/!{vcf_basename}.!{exo_yml_genome}.exo13/g" \
      !{exo_yml} > !{params.rundir}.analysisready.yml
 
-    java -Dlogging.file=$tmpDIR/spring.log \
+    java -Dlogging.file.name=- \
          -jar /data/shared/programmer/exomiser-cli-13.0.0/exomiser-cli-13.0.0.jar \
          --analysis !{params.rundir}.analysisready.yml \
          --spring.config.location=/data/shared/programmer/exomiser-cli-13.0.0/
@@ -144,7 +144,7 @@ process exo13_1 {
     s/OUTPUT_PH/!{vcf_basename}.!{exo_yml_genome}.exo13_1/g" \
     !{exo_yml} > !{params.rundir}.analysisready.yml
     
-    java -Dlogging.file=$tmpDIR/spring.log \
+    java -Dlogging.file.name=- \
          -jar /data/shared/programmer/exomiser-cli-13.1.0/exomiser-cli-13.1.0.jar \
          --analysis !{params.rundir}.analysisready.yml \
          --spring.config.location=/data/shared/programmer/exomiser-cli-13.1.0/
