@@ -91,7 +91,7 @@ process exo13 {
     user="$USER"
     tmpDIR="/data/TMP/TMP.${user}"
     export TMPDIR="$tmpDIR"
-    export JAVA_OPTS="-Dlogging.file=$tmpDIR/spring.log"
+
     index=`tail -n 1 !{ped}|awk '{print $2}'`
     father=`tail -n 1 !{ped}|awk '{print $3}'`
     mother=`tail -n 1 !{ped}|awk '{print $4}'`
@@ -103,8 +103,11 @@ process exo13 {
      s/HPO_PH/$hpolist/g; \
      s/OUTPUT_PH/!{vcf_basename}.!{exo_yml_genome}.exo13/g" \
      !{exo_yml} > !{params.rundir}.analysisready.yml
-    java -jar /data/shared/programmer/exomiser-cli-13.0.0/exomiser-cli-13.0.0.jar --analysis !{params.rundir}.analysisready.yml \
-     --spring.config.location=/data/shared/programmer/exomiser-cli-13.0.0/
+
+    java -Dlogging.file=$tmpDIR/spring.log \
+         -jar /data/shared/programmer/exomiser-cli-13.0.0/exomiser-cli-13.0.0.jar \
+         --analysis !{params.rundir}.analysisready.yml \
+         --spring.config.location=/data/shared/programmer/exomiser-cli-13.0.0/
     '''
 }
 
@@ -124,25 +127,29 @@ process exo13_1 {
     path("*.{html,tsv,vcf}")
     shell:
     '''
-
     user="$USER"
     tmpDIR="/data/TMP/TMP.${user}"
     export TMPDIR="$tmpDIR"
-    export JAVA_OPTS="-Dlogging.file=$tmpDIR/spring.log"
+    
     index=`tail -n 1 !{ped}|awk '{print $2}'`
     father=`tail -n 1 !{ped}|awk '{print $3}'`
     mother=`tail -n 1 !{ped}|awk '{print $4}'`
     hpolist=`sed -r 's/^HP:[[:digit:]]*/"&"/g' !{hpo} | awk '{print $1}'| paste -s -d, -`
+    
     sed "s/VCF_PH/!{vcf}/g; \
     s/GENOME_PH/!{exo_yml_genome}/g; \
     s/PROBAND_PH/${index}/g; \
-     s/PED_PH/!{ped}/g; \
-     s/HPO_PH/$hpolist/g; \
-     s/OUTPUT_PH/!{vcf_basename}.!{exo_yml_genome}.exo13_1/g" \
-     !{exo_yml} > !{params.rundir}.analysisready.yml
-    java -jar /data/shared/programmer/exomiser-cli-13.1.0/exomiser-cli-13.1.0.jar --analysis !{params.rundir}.analysisready.yml \
-     --spring.config.location=/data/shared/programmer/exomiser-cli-13.1.0/
+    s/PED_PH/!{ped}/g; \
+    s/HPO_PH/$hpolist/g; \
+    s/OUTPUT_PH/!{vcf_basename}.!{exo_yml_genome}.exo13_1/g" \
+    !{exo_yml} > !{params.rundir}.analysisready.yml
+    
+    java -Dlogging.file=$tmpDIR/spring.log \
+         -jar /data/shared/programmer/exomiser-cli-13.1.0/exomiser-cli-13.1.0.jar \
+         --analysis !{params.rundir}.analysisready.yml \
+         --spring.config.location=/data/shared/programmer/exomiser-cli-13.1.0/
     '''
+
 }
 
 
